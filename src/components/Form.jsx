@@ -1,31 +1,28 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import uploadIcon from '../assets/images/icon-upload.svg'
+import { useNavigate } from 'react-router-dom';
 const MAX_SIZE = 500 * 1024; // 500KB
 
-const DragAndDrop = () => {
+
+const DragAndDrop = ({ setAvatarImage, setEmail, setUsername, setGithubUsername }) => {
     const [preview, setPreview] = useState(null);
     const [uploadError, setUploadError] = useState(false);
+
+    const navigate = useNavigate();
 
     const onDrop = (acceptedFiles, rejectedFiles) => {
         if (rejectedFiles.length > 0) {
             const { file, errors } = rejectedFiles[0];
-            console.log(errors)
-            console.log(`Rejected file: ${file.name}`);
             errors.forEach(error => {
                 if (error.code === 'file-too-large') {
-                    setUploadError(prev => !prev);
-                    console.error('File is too large.');
-                    console.log(uploadError)
-                }
-                if (error.code === 'file-invalid-type') {
-                    console.error('Invalid file type.');
+                    setUploadError(true);
                 }
             });
         } else {
             const file = acceptedFiles[0];
-            console.log(`Accepted file: ${file.name}`);
             const reader = new FileReader();
+            setAvatarImage(file);
             reader.onloadend = () => {
                 setPreview(reader.result);
                 setUploadError(false);
@@ -38,13 +35,15 @@ const DragAndDrop = () => {
         onDrop,
         maxSize: MAX_SIZE,
         accept: {
-            'image/*': ['.jpeg, .png']
+            'image/*': ['.jpeg', '.png'] // Fixing the syntax here
         },
         multiple: false
     });
 
     const handleForm = (e) => {
         e.preventDefault();
+        navigate('/conference-ticket-generator/ticket');
+
     }
 
     return (
@@ -55,7 +54,7 @@ const DragAndDrop = () => {
             <form onSubmit={handleForm}>
                 <label htmlFor="avatar">Upload Avatar</label>
                 <div {...getRootProps()} className='dropzone'>
-                    <input {...getInputProps()} id='avatar' required/>
+                    <input {...getInputProps()} id='avatar' required />
                     {preview ? (
                         <div>
                             <img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: '70px' }} />
@@ -71,27 +70,28 @@ const DragAndDrop = () => {
                         </div>
                     )}
                 </div>
-                {
-                    uploadError
-                        ?
-                        <p className='upload-error'>File too large. Please upload a photo under 500KB.</p>
-                        :
-                        <p className='upload-no-error'>Upload your photo (JPG or PNG, max size: 500KB).</p>
-                }
+                {uploadError ? (
+                    <p className='upload-error'>File too large. Please upload a photo under 500KB.</p>
+                ) : (
+                    <p className='upload-no-error'>Upload your photo (JPG or PNG, max size: 500KB).</p>
+                )}
 
                 <div className='form-field'>
                     <label htmlFor="name">Full Name</label>
-                    <input type="text" id='name' placeholder='enter your name' required />
+                    <input type="text" id='name' placeholder='enter your name' onChange={e => setUsername(e.target.value)} required />
                 </div>
+
                 <div className='form-field'>
                     <label htmlFor="email">Email Address</label>
-                    <input type="email" id='email' placeholder='enter your email' required />
+                    <input type="email" id='email' placeholder='enter your email' onChange={e => setEmail(e.target.value)} required />
                     <p>Please enter a valid email address</p>
                 </div>
+
                 <div className='form-field'>
                     <label htmlFor="github">Github Username</label>
-                    <input type="text" id='github' placeholder='github @username' required />
+                    <input type="text" id='github' placeholder='github @username' onChange={e => setGithubUsername(e.target.value)} required />
                 </div>
+
                 <input type="submit" value="Generate My Ticket" className='form-btn' />
             </form>
         </div>
