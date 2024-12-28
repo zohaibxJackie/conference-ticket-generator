@@ -47,54 +47,112 @@ const DragAndDrop = ({ setAvatarImage, setEmail, setUsername, setGithubUsername 
     }
 
     return (
-        <div className='form-wrapper'>
-            <h1>Your Journey to Coding Conf 2025 Starts Here!</h1>
-            <p>Secure your spot at next year's biggest coding conference.</p>
+        <div className="form-wrapper">
+            <h1 tabIndex="0">Your Journey to Coding Conf 2025 Starts Here!</h1>
+            <p tabIndex="0">Secure your spot at next year's biggest coding conference.</p>
 
-            <form onSubmit={handleForm}>
+            <form onSubmit={handleForm} aria-labelledby="form-title">
                 <label htmlFor="avatar">Upload Avatar</label>
-                <div {...getRootProps()} className='dropzone'>
-                    <input {...getInputProps()} id='avatar' required />
+                <div
+                    {...getRootProps()}
+                    className="dropzone"
+                    role="button"
+                    aria-label="Upload your avatar. Drag and drop or click to upload."
+                    tabIndex="0"
+                    onKeyDown={(e) => e.key === "Enter" && document.getElementById('avatar').click()}
+                >
+                    <input {...getInputProps()} id="avatar" required aria-required="true" />
                     {preview ? (
                         <div>
-                            <img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: '70px' }} />
-                            <div className='dz-btns'>
-                                <button type="button" className='dropzone-btn' onClick={() => setPreview(null)}>Remove Image</button>
-                                <button type="button" className='dropzone-btn' onClick={() => document.getElementById('avatar').click()}>Change Image</button>
+                            <img
+                                src={preview}
+                                alt="Uploaded avatar preview"
+                                style={{ maxWidth: '100%', maxHeight: '70px' }}
+                            />
+                            <div className="dz-btns">
+                                <button
+                                    type="button"
+                                    className="dropzone-btn"
+                                    onClick={() => setPreview(null)}
+                                    aria-label="Remove uploaded image"
+                                >
+                                    Remove Image
+                                </button>
+                                <button
+                                    type="button"
+                                    className="dropzone-btn"
+                                    onClick={() => document.getElementById('avatar').click()}
+                                    aria-label="Change uploaded image"
+                                >
+                                    Change Image
+                                </button>
                             </div>
                         </div>
                     ) : (
                         <div>
-                            <div className='dropzone-img-wrapper'><img src={uploadIcon} alt="drop zone icon" /></div>
+                            <div className="dropzone-img-wrapper">
+                                <img src={uploadIcon} alt="Upload icon" />
+                            </div>
                             <p>Drag & drop, or click to upload</p>
                         </div>
                     )}
                 </div>
                 {uploadError ? (
-                    <p className='upload-error'>File too large. Please upload a photo under 500KB.</p>
+                    <p className="upload-error" role="alert">File too large. Please upload a photo under 500KB.</p>
                 ) : (
-                    <p className='upload-no-error'>Upload your photo (JPG or PNG, max size: 500KB).</p>
+                    <p className="upload-no-error">Upload your photo (JPG or PNG, max size: 500KB).</p>
                 )}
 
-                <div className='form-field'>
+                <div className="form-field">
                     <label htmlFor="name">Full Name</label>
-                    <input type="text" id='name' placeholder='enter your name' onChange={e => setUsername(e.target.value)} required />
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter your name"
+                        onChange={(e) => setUsername(e.target.value)}
+                        autoComplete="off"
+                        required
+                        aria-required="true"
+                    />
                 </div>
 
-                <div className='form-field'>
+                <div className="form-field">
                     <label htmlFor="email">Email Address</label>
-                    <input type="email" id='email' placeholder='enter your email' onChange={e => setEmail(e.target.value)} required />
-                    <p>Please enter a valid email address</p>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete="off"
+                        required
+                        aria-required="true"
+                        aria-describedby="email-desc"
+                    />
+                    <p id="email-desc">Please enter a valid email address</p>
                 </div>
 
-                <div className='form-field'>
+                <div className="form-field">
                     <label htmlFor="github">Github Username</label>
-                    <input type="text" id='github' placeholder='github @username' onChange={e => setGithubUsername(e.target.value)} required />
+                    <input
+                        type="text"
+                        id="github"
+                        placeholder="GitHub @username"
+                        onChange={(e) => setGithubUsername(e.target.value)}
+                        autoComplete="off"
+                        required
+                        aria-required="true"
+                    />
                 </div>
 
-                <input type="submit" value="Generate My Ticket" className='form-btn' />
+                <input
+                    type="submit"
+                    value="Generate My Ticket"
+                    className="form-btn"
+                    aria-label="Generate your ticket"
+                />
             </form>
         </div>
+
     );
 };
 

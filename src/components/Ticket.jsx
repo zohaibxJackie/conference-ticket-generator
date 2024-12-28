@@ -23,24 +23,41 @@ const Ticket = ({ avatarImage, githubUsername, username, email }) => {
 
     return (
         <div className='ticket-page'>
-            <h1>Congrats, <span className='gradient-text'>{username}</span><br />Your ticket is ready.</h1>
-            <p>We've emailed your ticket to<br /><span className='highlighted-text'>{email}</span> and will send updates in<br />the run up to the event.</p>
+            <h1>
+                Congrats, <span className='gradient-text'>{username}</span><br />
+                Your ticket is ready.
+            </h1>
+            <p>
+                We've emailed your ticket to<br />
+                <span className='highlighted-text'>{email}</span> and will send updates in<br />
+                the run-up to the event.
+            </p>
 
-            <div className='ticket-wrapper'>
-                <img src={ticketImage} id='ticket-body' alt="ticket image" />
-                <span id='ticket-number'>#10906</span>
+            <div className='ticket-wrapper' aria-labelledby="ticket-body" role="region">
+                <img
+                    src={ticketImage}
+                    id='ticket-body'
+                    alt="Your event ticket, showing event details"
+                />
+                <span id='ticket-number' aria-label="Your Ticket number is 10906">#10906</span>
 
                 <div className='ticket-header'>
-                    <img src={logo} id='ticket-logo' alt="Logo image" />
+                    <img src={logo} id='ticket-logo' alt="Event logo" />
                     <p id='ticket-info'>Jan 31, 2025 / Austin, TX</p>
                 </div>
                 <div className='ticket-footer'>
-                    {avatarUrl && <img src={avatarUrl} id='ticket-avatar' alt="Avatar image" />}
+                    {avatarUrl && (
+                        <img
+                            src={avatarUrl}
+                            id='ticket-avatar'
+                            alt="Your uploaded avatar"
+                        />
+                    )}
                     <div>
-                        <p id='username'>{username}</p>
+                        <p id='username' aria-label={`Your username is ${username}`}>{username}</p>
                         <div className='tf-info-area'>
-                            <img src={githubImage} id='github-icon' alt="Github icon" />
-                            <span id='github-username'>@{githubUsername}</span>
+                            <img src={githubImage} id='github-icon' alt="GitHub icon" />
+                            <span id='github-username' aria-label={`Your github username is ${githubUsername}`}>@{githubUsername}</span>
                         </div>
                     </div>
                 </div>
